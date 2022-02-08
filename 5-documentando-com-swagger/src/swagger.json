@@ -1,0 +1,228 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SOLID Introduction",
+    "description": "This is api to learn SOLID and clean architectures",
+    "version": "1.0.0",
+    "contact": {
+      "email": "judsonjuniorr@gmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Create new user",
+        "description": "Create a new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "Jane Doe",
+                  "email": "janedoe@gmail.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string", "format": "uuid" },
+                    "name": { "type": "string" },
+                    "email": { "type": "string" },
+                    "admin": { "type": "boolean" },
+                    "created_at": { "type": "string", "format": "date" },
+                    "updated_at": { "type": "string", "format": "date" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "User already exists"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "get": {
+        "tags": ["User"],
+        "summary": "List All Users",
+        "description": "List all users if user have previleges",
+
+        "parameters": [
+          {
+            "in": "header",
+            "name": "user_id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "properties": [
+                    {
+                      "id": { "type": "string", "format": "uuid" },
+                      "name": { "type": "string" },
+                      "email": { "type": "string" },
+                      "admin": { "type": "boolean" },
+                      "created_at": { "type": "string", "format": "date" },
+                      "updated_at": { "type": "string", "format": "date" }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "User does not have privileges or not exists"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Turn user to admin",
+        "description": "Make a created user admin",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "Admin ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "email": { "type": "string" },
+                    "admin": { "type": "boolean" },
+                    "created_at": { "type": "string", "format": "date" },
+                    "updated_at": { "type": "string", "format": "date" }
+                  }
+                }
+              }
+            }
+          },
+
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "User does not exists !"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "List one user",
+        "description": "List one user using the user_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "description": "ID of user will be apresented",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string", "format": "uuid" },
+                    "name": { "type": "string" },
+                    "email": { "type": "string" },
+                    "admin": { "type": "boolean" },
+                    "created_at": { "type": "string", "format": "date" },
+                    "updated_at": { "type": "string", "format": "date" }
+                  }
+                }
+              }
+            }
+          },
+
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "User does not exists"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
